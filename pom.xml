@@ -13,8 +13,8 @@
 
 	<modules>
 		<module>TodoListBusinessLogic</module>
-		<module>TodoListWeb</module>
         <module>TodoListPersistence</module>
+		<module>TodoListWeb</module>
 	</modules>
 
 	<properties>

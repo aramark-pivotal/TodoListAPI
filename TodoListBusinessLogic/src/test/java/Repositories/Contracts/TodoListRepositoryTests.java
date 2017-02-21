@@ -2,6 +2,7 @@ package Repositories.Contracts;
 
 import com.example.Models.TodoList;
 import com.example.Repositories.Interfaces.TodoListRepository;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,6 +20,11 @@ public abstract class TodoListRepositoryTests {
     @Before
     public void before() {
         repo = createRepo();
+    }
+
+    @After
+    public void after() {
+        repo.deleteAll();
     }
 
     @Test
@@ -48,7 +54,9 @@ public abstract class TodoListRepositoryTests {
 
         List<TodoList> todoLists = repo.fetchAll();
 
-        assertThat(todoLists, equalTo(Arrays.asList(todoList1, todoList2)));
+        assertThat(todoLists.size(), equalTo(2));
+        assertThat(todoLists.get(0).getName(), equalTo(todoList1.getName()));
+        assertThat(todoLists.get(1).getName(), equalTo(todoList2.getName()));
     }
 
     @Test

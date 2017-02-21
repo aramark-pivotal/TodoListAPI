@@ -1,4 +1,4 @@
-package com.example.Repositories;
+package com.example.Adapters;
 
 import com.example.Models.TodoList;
 import com.example.Repositories.Interfaces.TodoListRepository;
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class InMemoryTodoListRepository implements TodoListRepository {
-    private List<TodoList> todoLists = new ArrayList<TodoList>();
+    private List<TodoList> todoLists = new ArrayList<>();
 
     public void save(TodoList todoList) {
         todoList.setId(UUID.randomUUID());
@@ -20,6 +20,6 @@ public class InMemoryTodoListRepository implements TodoListRepository {
     }
 
     public void deleteAll() {
-        todoLists = new ArrayList<TodoList>();
+        todoLists = new ArrayList<>();
     }
 }
