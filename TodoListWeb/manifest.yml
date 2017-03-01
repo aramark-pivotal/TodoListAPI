@@ -1,0 +1,4 @@
+---
+applications:
+- name: aramark-pivotal-todolist
+  path: target/TodoListWeb-0.0.1-SNAPSHOT.jar

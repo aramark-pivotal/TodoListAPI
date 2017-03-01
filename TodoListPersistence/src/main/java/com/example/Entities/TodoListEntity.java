@@ -4,8 +4,13 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name="todolists")
+@Table(name="todo_lists")
 public class TodoListEntity {
+
+    @Id
+    @GeneratedValue
+    private UUID id;
+    private String name;
 
     public String getName() {
         return name;
@@ -23,9 +28,4 @@ public class TodoListEntity {
         this.id = id;
     }
 
-    private String name;
-
-    @Id
-    @GeneratedValue
-    private UUID id;
 }
