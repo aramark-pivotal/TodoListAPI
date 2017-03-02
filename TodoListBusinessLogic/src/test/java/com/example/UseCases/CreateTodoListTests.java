@@ -1,8 +1,7 @@
 package com.example.UseCases;
 
 import Fakes.FakeTodoListRepository;
-import com.example.Exceptions.InvalidTodoListException;
-import com.example.Models.TodoList;
+import Spies.CreateTodoListObserverSpy;
 import com.example.Repositories.Interfaces.TodoListRepository;
 import org.junit.After;
 import org.junit.Before;
@@ -10,33 +9,37 @@ import org.junit.Test;
 
 import static com.example.UseCases.CreateTodoList.createTodoList;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 public class CreateTodoListTests {
 
     private TodoListRepository repo = new FakeTodoListRepository();
+    private CreateTodoListObserverSpy observer = new CreateTodoListObserverSpy();
 
     @Before
     public void before() {
+        observer.reset();
         repo.deleteAll();
     }
 
     @After
     public void after() {
+        observer.reset();
         repo.deleteAll();
     }
 
     @Test
-    public void createTodoList_withValidName_returnsTheTodoList() throws Exception {
-        TodoList todoList = createTodoList("A Valid Name", repo);
+    public void createTodoList_withValidName_notifiesTheObserverWithTheTodoList() throws Exception {
+        createTodoList("A Valid Name", observer, repo);
 
-        assertThat(todoList.getName(), equalTo("A Valid Name"));
-        assertNotNull(todoList.getId());
+        assertThat(observer.createdTodoList.getName(), equalTo("A Valid Name"));
+        assertNotNull(observer.createdTodoList.getId());
     }
 
-    @Test(expected = InvalidTodoListException.class)
-    public void createTodoList_withEmptyName_throwsInvalidTodoListException() throws Exception {
-        createTodoList("", repo);
+    @Test
+    public void createTodoList_withEmptyName_notifiesTheObserverWithError() throws Exception {
+        createTodoList("", observer, repo);
+
+        assertTrue(observer.invalidTodoListWasCalled);
     }
 }
