@@ -10,12 +10,12 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-import static com.example.UseCases.FetchAllTodoLists.fetchAllTodoLists;
 import static org.junit.Assert.*;
 
 public class FetchAllTodoListsTests {
 
     private TodoListRepository repo = new FakeTodoListRepository();
+    private FetchAllTodoLists fetchAllTodoLists = new FetchAllTodoLists(repo);
     private FetchAllTodoListsObserverSpy observer = new FetchAllTodoListsObserverSpy();
 
     @Before
@@ -32,7 +32,7 @@ public class FetchAllTodoListsTests {
 
     @Test
     public void fetchAllTodoLists_whenThereAreNoSavedTodoLists_notifiesTheObserverOfEmptyResults() {
-        fetchAllTodoLists(observer, repo);
+        fetchAllTodoLists.execute(observer);
 
         assertTrue(observer.emptyResultsWasCalled);
     }
@@ -45,7 +45,7 @@ public class FetchAllTodoListsTests {
         repo.save(todoList1);
         repo.save(todoList2);
 
-        fetchAllTodoLists(observer, repo);
+        fetchAllTodoLists.execute(observer);
 
         assertEquals(observer.fetchedTodoLists, Arrays.asList(todoList1, todoList2));
     }

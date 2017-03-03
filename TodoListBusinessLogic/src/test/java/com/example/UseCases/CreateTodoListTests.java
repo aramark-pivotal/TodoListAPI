@@ -7,13 +7,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.example.UseCases.CreateTodoList.createTodoList;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.*;
 
 public class CreateTodoListTests {
 
     private TodoListRepository repo = new FakeTodoListRepository();
+    private CreateTodoList createTodoList = new CreateTodoList(repo);
+
     private CreateTodoListObserverSpy observer = new CreateTodoListObserverSpy();
 
     @Before
@@ -30,7 +31,7 @@ public class CreateTodoListTests {
 
     @Test
     public void createTodoList_withValidName_notifiesTheObserverWithTheTodoList() throws Exception {
-        createTodoList("A Valid Name", observer, repo);
+        createTodoList.execute("A Valid Name", observer);
 
         assertThat(observer.createdTodoList.getName(), equalTo("A Valid Name"));
         assertNotNull(observer.createdTodoList.getId());
@@ -38,7 +39,7 @@ public class CreateTodoListTests {
 
     @Test
     public void createTodoList_withEmptyName_notifiesTheObserverWithError() throws Exception {
-        createTodoList("", observer, repo);
+        createTodoList.execute("", observer);
 
         assertTrue(observer.invalidTodoListWasCalled);
     }

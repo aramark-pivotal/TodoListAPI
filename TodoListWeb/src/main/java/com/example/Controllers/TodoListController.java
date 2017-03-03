@@ -2,7 +2,8 @@ package com.example.Controllers;
 
 import com.example.Observers.CreateTodoListObserverImpl;
 import com.example.Observers.FetchAllTodoListsObserverImpl;
-import com.example.Repositories.Interfaces.TodoListRepository;
+import com.example.UseCases.CreateTodoList;
+import com.example.UseCases.FetchAllTodoLists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,26 +12,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 
-import static com.example.UseCases.CreateTodoList.createTodoList;
-import static com.example.UseCases.FetchAllTodoLists.fetchAllTodoLists;
-
 @RestController("/todoLists")
 public class TodoListController {
 
     @Autowired
-    private TodoListRepository todoListRepo;
+    private CreateTodoList createTodoList;
+
+    @Autowired
+    private FetchAllTodoLists fetchAllTodoLists;
 
     @PostMapping
     public DeferredResult<ResponseEntity> createNewTodoList(@RequestParam(value = "name") String name) {
         DeferredResult<ResponseEntity> response = new DeferredResult<>();
-        createTodoList(name, new CreateTodoListObserverImpl(response), todoListRepo);
+        createTodoList.execute(name, new CreateTodoListObserverImpl(response));
         return response;
     }
 
     @GetMapping
     public DeferredResult<ResponseEntity> fetchAll() {
         DeferredResult<ResponseEntity> response = new DeferredResult<>();
-        fetchAllTodoLists(new FetchAllTodoListsObserverImpl(response), todoListRepo);
+        fetchAllTodoLists.execute(new FetchAllTodoListsObserverImpl(response));
         return response;
     }
 }

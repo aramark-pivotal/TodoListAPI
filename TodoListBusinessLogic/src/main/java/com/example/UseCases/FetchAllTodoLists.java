@@ -8,14 +8,12 @@ import java.util.List;
 
 public class FetchAllTodoLists {
     private final TodoListRepository todoListRepository;
-    private final FetchAllTodoListsObserver observer;
 
-    public FetchAllTodoLists(FetchAllTodoListsObserver observer, TodoListRepository todoListRepository) {
+    public FetchAllTodoLists(TodoListRepository todoListRepository) {
         this.todoListRepository = todoListRepository;
-        this.observer = observer;
     }
 
-    public void execute() {
+    public void execute(FetchAllTodoListsObserver observer) {
         List<TodoList> todoLists = todoListRepository.fetchAll();
         if (todoLists.size() > 0) {
             observer.fetchedResults(todoLists);
@@ -23,10 +21,5 @@ public class FetchAllTodoLists {
             observer.emptyResults();
         }
     }
-
-    public static void fetchAllTodoLists(FetchAllTodoListsObserver observer, TodoListRepository todoListRepository) {
-        new FetchAllTodoLists(observer, todoListRepository).execute();
-    }
-
 
 }

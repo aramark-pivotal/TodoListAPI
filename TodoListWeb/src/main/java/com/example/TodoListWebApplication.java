@@ -3,6 +3,8 @@ package com.example;
 import com.example.JpaRepositories.TodoListJpaRepository;
 import com.example.Repositories.Interfaces.TodoListRepository;
 import com.example.Adapters.TodoListRepositoryAdapter;
+import com.example.UseCases.CreateTodoList;
+import com.example.UseCases.FetchAllTodoLists;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +22,16 @@ public class TodoListWebApplication {
 	@Bean
 	public TodoListRepository todoListRepository(TodoListJpaRepository todoListJpaRepository) {
 		return new TodoListRepositoryAdapter(todoListJpaRepository);
+	}
+
+	@Bean
+	public CreateTodoList createTodoList(TodoListRepository todoListRepository) {
+		return new CreateTodoList(todoListRepository);
+	}
+
+	@Bean
+	public FetchAllTodoLists fetchAllTodoLists(TodoListRepository todoListRepository) {
+		return new FetchAllTodoLists(todoListRepository);
 	}
 
 }
